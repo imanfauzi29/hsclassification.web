@@ -29,8 +29,9 @@ export default function Dashboard(){
 
     
     return (
-        <Layout className="ctnr-hs-input" style={{backgroundColor:'#FFF'}}>
-            <Content style={{ padding: '0 50px' }}>
+            <Header>
+                <img src={logo} alt="logo-hakovo" style={{display: "inline-block"}} />
+            </Header>
                 <div className="site-layout-content">
                     <HSTable commodityList/>
                 </div>
