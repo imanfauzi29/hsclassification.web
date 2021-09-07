@@ -1,41 +1,42 @@
-import React, {useState,useEffect} from "react";
-import { Layout  } from 'antd';
+import React, { useState, useEffect } from "react"
+import { Layout } from "antd"
 
-import { useRequestRecommendations } from "../../utils/actions/dashboard";
-import { HSTable } from "../../components/hstable";
+import { useRequestRecommendations } from "../../utils/actions/dashboard"
+import { HSTable } from "../../components/hstable"
 
-const { Content } = Layout;
+import logo from "../../assets/logo-inline.svg"
 
-localStorage.setItem("recommendations_data",JSON.stringify({}));
+const { Header, Content } = Layout
 
-export default function Dashboard(){
+localStorage.setItem("recommendations_data", JSON.stringify({}))
 
-    const [commodityList,setCommodityList] = useState([]);
-	const [requestRecommendations] = useRequestRecommendations();
+export default function Dashboard() {
+    const [commodityList, setCommodityList] = useState([])
+    const [requestRecommendations] = useRequestRecommendations()
 
+    const handleFindRecommendations = async ({ text }) => {
+        const formData = new FormData()
+        formData.append("text", text)
 
-    const handleFindRecommendations = ({text}) =>{
-        const formData = new FormData();
-        formData.append('text',text);
+        await requestRecommendations(formData)
 
-        requestRecommendations(formData);
-        
-        var result = JSON.parse(localStorage.getItem("recommendations_data"));
-        if(result) setCommodityList(result);        
+        var result = JSON.parse(localStorage.getItem("recommendations_data"))
+        if (result) setCommodityList(result)
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => handleFindRecommendations({ text: "linen" }), [])
 
-    useEffect(()=> handleFindRecommendations('linen') ,[]);
-
-    
     return (
+        <Layout className="ctnr-hs-input" style={{ backgroundColor: "#FFF" }}>
             <Header>
                 <img src={logo} alt="logo-hakovo" style={{display: "inline-block"}} />
             </Header>
+            <Content style={{ padding: "0 50px" }}>
                 <div className="site-layout-content">
-                    <HSTable commodityList/>
+                    <HSTable commodityList={commodityList} />
                 </div>
             </Content>
         </Layout>
-    );
+    )
 }
